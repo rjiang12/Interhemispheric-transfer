@@ -629,12 +629,95 @@
                 task: 'inter_trial',
             }
         }
-    
+        
+        /* Create the sample tests' stimuli */
+        var sample_stimuli = []; 
+
         /* Create the test stimuli */
         var test_stimuli = [];
 
         Letters = ["A", "B", "C", "D", "E", "F", "G"];
         Symbols = ["!", "@", "#", "$", "%", "&"];
+
+        /* For trials only */
+        function sample_attention_check(arr, loc1, loc2) {
+            random_idx = Math.floor(Math.random() * arr.length);
+            letterUpper = arr[random_idx];
+            letterLower = arr[(random_idx + 2) % arr.length].toLowerCase();
+            stimulus_function = drawSymbolsFrame("string", letterUpper, letterLower, loc1, loc2, "orange");
+            stimulus_dict = {stimulus: stimulus_function, choices: ['m', 'n', ' '], correct_response: " "};
+            sample_stimuli.push(stimulus_dict);
+        }
+
+        function sample_matching(loc1, loc2, arrLength) {
+            random_letter_idx = Math.floor(Math.random() * Letters.length);
+            letterUpper = Letters[random_letter_idx];
+            letterLower = letterUpper.toLowerCase();
+            stimulus_function = drawSymbolsFrame("string", letterUpper, letterLower, loc1, loc2);
+            stimulus_dict = {stimulus: stimulus_function, choices: ['m', 'n'], correct_response: 'm'};
+            sample_stimuli.push(stimulus_dict);
+        }
+
+        function sample_nonmatching(loc1, loc2, arrLength) {
+            random_letter_idx = Math.floor(Math.random() * Letters.length);
+            letterUpper = Letters[random_letter_idx];
+            letterLower = Letters[(random_letter_idx + 2) % arrLength].toLowerCase();
+            stimulus_function = drawSymbolsFrame("string", letterUpper, letterLower, loc1, loc2);
+            stimulus_dict = {stimulus: stimulus_function, choices: ['m', 'n'], correct_response: 'n'};
+            sample_stimuli.push(stimulus_dict);
+        }
+       
+        sample_matching('ll', 'lr', 1);
+        
+        sample_nonmatching('ul', 'ur', 1);
+        
+        sample_matching('ll', 'ul', 1);
+        
+        sample_nonmatching('lr', 'ur', 1);
+
+        sample_attention_check(Letters, 'll', 'lr'); 
+
+        var sample = {
+            type: "canvas-keyboard-response",
+            stimulus: jsPsych.timelineVariable('stimulus'),
+            choices: jsPsych.timelineVariable('choices'),
+            data: {
+                task: 'response',
+                correct_response: jsPsych.timelineVariable('correct_response')
+            },
+            stimulus_duration: 60,
+            on_finish: function(data){
+                data.correct = jsPsych.pluginAPI.compareKeys(data.response, data.correct_response);
+            }
+        }
+
+        var sample_procedure = {
+          timeline: [ready_box, fixation_box, wait_box, sample, inter_trial],
+          timeline_variables: sample_stimuli
+        }
+        block_timeline.push(sample_procedure); 
+
+        var block_begin_screen_4 = {
+            type: "html-keyboard-response",
+          stimulus: `
+            <div style='width: 700px;'>
+            Samples complete. You are now ready to begin the task.
+            <p>PRESS SPACEBAR TO BEGIN THE TRIALS</p>
+            </div>
+          `,
+          choices: [" "],
+          post_trial_gap: 100
+        };
+        block_timeline.push(block_begin_screen_4);
+
+        var blocks = {
+            timeline: block_timeline
+        }; 
+
+        timeline.push(blocks); 
+        
+        
+        var trial_timeline = [];
 
         /* Add 4 attention checks with random colors */
         function attention_check(arr, loc1, loc2) {
@@ -725,13 +808,13 @@
           repetitions: 1
         }
     
-        block_timeline.push(test_procedure);
+        trial_timeline.push(test_procedure);
 
-        var blocks = {
-            timeline: block_timeline
+        var trials = {
+            timeline: trial_timeline
         }; 
 
-        timeline.push(blocks); 
+        timeline.push(trials); 
 
         /* Debriefing participant after the experiment. */
         var debrief_block = {

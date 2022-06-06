@@ -354,16 +354,13 @@
           stimulus: `
             <div style='width: 700px;'>
             <div>
-                Short recap: <br>
+                Reminders: <br>
             <ul>
-                <li>Try to fixate the fixation to in the center of the screen throughout the entire block</li>
-                <li>Press ’M’ for two matching images next to the fixation dot and “N’’ for non-matching images</li>
-                <li>Try to respond as fast as possible</li>
-                <li>Use the index and middle finger of one hand to make these responses. 
-                Which hand will be instructed at the beginning of each block</li>
-                <li>When the fixation dot briefly flashes orange press the SPACEBAR as fast as possible<br>
-                <li>Stay centered with respect to the screen</li>
-                <li>Try to keep your distance to the screen constant.</li>
+                <li>Please make utmost effort to NOT move throughout the experiment. </li>
+                <li>Your position relative to the screen is crucial.</li>
+                <li>Respond with 'M' for matching and 'N' for nonmatching. Do not switch hands unless instructed.</li>
+                <li>Press the SPACEBAR as fast as possible when and only when the fixation dot flashes orange.</li>
+                <li>Again, please make it a priority to not move relative to the screen throughout the experiment.</li>
             </ul>
             <div style='width: 700px;'>
             You are now ready to begin the task.
@@ -638,6 +635,7 @@
 
         Letters = ["A", "B", "C", "D", "E", "F", "G"];
         Symbols = ["!", "@", "#", "$", "%", "&"];
+        Images = ['img/lower_a.png', 'img/lower_b.png', 'img/lower_c.png', 'img/upper_a.png', 'img/upper_b.png', 'img/upper_c.png'];
 
         /* For trials only */
         function sample_attention_check(arr, loc1, loc2) {
@@ -844,21 +842,16 @@
 
         /*
         TODO: 
-        1. Re-nest everything
-            - Nested as per spec sheet
-        2. Finish instructions. 
-            - Sample trials 
-            - Other instruction pages
-        3. Implement attention checks properly. 
-        4. More stimuli
-            - Nonsense symbols
-            - Categorical stimuli
-        5. Data collection
-            - Correctness
-            - Handedness
-            - RT
-            - Visual angle
-        6. Other resize options. -> measure visual angle.
+        1. Keep fixation dot and cross in place, along with box
+        2. Fix instruction pages
+        3. Speed up inter-trial interval so that the eyes don't wander too much
+        4. Make stimuli bigger/adapt stimulus to the sitting distance
+        5. Redo distance orientation in between blocks - perhaps re-scale the stimulus? 
+        6. Highlight in instructions that the participant SHOULD NOT move. 
+        7. Uses images of the letters instead of the string letters. 
+        https://www.dropbox.com/home/interhemispheric_proj -> for images
         */
     </script>
 </html>
+
+

@@ -640,29 +640,27 @@
         /* For trials only */
         function sample_attention_check(arr, loc1, loc2) {
             random_idx = Math.floor(Math.random() * arr.length);
-            //letterUpper = arr[random_idx];
-            //letterLower = arr[random_idx];
-            letterUpper = 'img/fixation_cross_hair_bulls_eye.jpg';
-            letterLower = 'img/LR_hands.jpg';
-            stimulus_function = drawSymbolsFrame("image", letterUpper, letterLower, loc1, loc2, "orange");
+            letterUpper = arr[random_idx];
+            letterLower = arr[(random_idx + 2) % arr.length].toLowerCase();
+            stimulus_function = drawSymbolsFrame("string", letterUpper, letterLower, loc1, loc2, "orange");
             stimulus_dict = {stimulus: stimulus_function, choices: ['m', 'n', ' '], correct_response: " "};
             sample_stimuli.push(stimulus_dict);
         }
 
         function sample_matching(loc1, loc2, arrLength) {
             random_letter_idx = Math.floor(Math.random() * Letters.length);
-            letterUpper = 'img/fixation_cross_hair_bulls_eye.jpg';
-            letterLower = 'img/LR_hands.jpg';
-            stimulus_function = drawSymbolsFrame("image", letterUpper, letterLower, loc1, loc2);
+            letterUpper = Letters[random_letter_idx];
+            letterLower = letterUpper.toLowerCase();
+            stimulus_function = drawSymbolsFrame("string", letterUpper, letterLower, loc1, loc2);
             stimulus_dict = {stimulus: stimulus_function, choices: ['m', 'n'], correct_response: 'm'};
             sample_stimuli.push(stimulus_dict);
         }
 
         function sample_nonmatching(loc1, loc2, arrLength) {
             random_letter_idx = Math.floor(Math.random() * Letters.length);
-            letterUpper = 'img/fixation_cross_hair_bulls_eye.jpg';
-            letterLower = 'img/LR_hands.jpg';
-            stimulus_function = drawSymbolsFrame("image", letterUpper, letterLower, loc1, loc2);
+            letterUpper = Letters[random_letter_idx];
+            letterLower = Letters[(random_letter_idx + 2) % arrLength].toLowerCase();
+            stimulus_function = drawSymbolsFrame("string", letterUpper, letterLower, loc1, loc2);
             stimulus_dict = {stimulus: stimulus_function, choices: ['m', 'n'], correct_response: 'n'};
             sample_stimuli.push(stimulus_dict);
         }
@@ -675,7 +673,7 @@
         
         sample_nonmatching('lr', 'ur', 1);
 
-        sample_attention_check(Images, 'll', 'lr'); 
+        sample_attention_check(Letters, 'll', 'lr'); 
 
         var sample = {
             type: "canvas-keyboard-response",

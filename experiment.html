@@ -639,41 +639,38 @@
 
         /* For trials only */
         function sample_attention_check(arr, loc1, loc2) {
-            random_idx = Math.floor(Math.random() * arr.length);
-            //letterUpper = arr[random_idx];
-            //letterLower = arr[random_idx];
-            letterUpper = 'img/fixation_cross_hair_bulls_eye.jpg';
-            letterLower = 'img/LR_hands.jpg';
+            letterUpper = 'img/lower_a.png';
+            letterLower = 'img/upper_a.png';
             stimulus_function = drawSymbolsFrame("image", letterUpper, letterLower, loc1, loc2, "orange");
             stimulus_dict = {stimulus: stimulus_function, choices: ['m', 'n', ' '], correct_response: " "};
             sample_stimuli.push(stimulus_dict);
         }
 
-        function sample_matching(loc1, loc2, arrLength) {
-            random_letter_idx = Math.floor(Math.random() * Letters.length);
-            letterUpper = 'img/fixation_cross_hair_bulls_eye.jpg';
-            letterLower = 'img/LR_hands.jpg';
+        function sample_matching(loc1, loc2) {
+            random_letter_idx = Math.floor(Math.random() * Images.length);
+            letterUpper = Images[random_letter_idx];
+            letterLower = Images[(random_letter_idx + 3) % Images.length]; // The + 3 must be changed if more images are added. 
             stimulus_function = drawSymbolsFrame("image", letterUpper, letterLower, loc1, loc2);
             stimulus_dict = {stimulus: stimulus_function, choices: ['m', 'n'], correct_response: 'm'};
             sample_stimuli.push(stimulus_dict);
         }
 
-        function sample_nonmatching(loc1, loc2, arrLength) {
-            random_letter_idx = Math.floor(Math.random() * Letters.length);
-            letterUpper = 'img/fixation_cross_hair_bulls_eye.jpg';
-            letterLower = 'img/LR_hands.jpg';
+        function sample_nonmatching(loc1, loc2) {
+            random_letter_idx = Math.floor(Math.random() * Images.length);
+            letterUpper = Images[random_letter_idx];
+            letterLower = Images[(random_letter_idx + 2) % Images.length]; // The + 2 must be changed if more images are added. 
             stimulus_function = drawSymbolsFrame("image", letterUpper, letterLower, loc1, loc2);
             stimulus_dict = {stimulus: stimulus_function, choices: ['m', 'n'], correct_response: 'n'};
             sample_stimuli.push(stimulus_dict);
         }
        
-        sample_matching('ll', 'lr', 1);
+        sample_matching('ll', 'lr');
         
-        sample_nonmatching('ul', 'ur', 1);
+        sample_nonmatching('ul', 'ur');
         
-        sample_matching('ll', 'ul', 1);
+        sample_matching('ll', 'ul');
         
-        sample_nonmatching('lr', 'ur', 1);
+        sample_nonmatching('lr', 'ur');
 
         sample_attention_check(Images, 'll', 'lr'); 
 
@@ -685,10 +682,11 @@
                 task: 'response',
                 correct_response: jsPsych.timelineVariable('correct_response')
             },
-            stimulus_duration: 60,
+            stimulus_duration: 60
+            /*
             on_finish: function(data){
                 data.correct = jsPsych.pluginAPI.compareKeys(data.response, data.correct_response);
-            }
+            } */// should delete. 
         }
 
         var sample_procedure = {
@@ -722,10 +720,9 @@
         /* Add 4 attention checks with random colors */
         function attention_check(arr, loc1, loc2) {
             for (var i = 0; i < 4; i++) {
-                random_idx = Math.floor(Math.random() * arr.length);
-                letterUpper = arr[random_idx];
-                letterLower = arr[(random_idx + 2) % arr.length].toLowerCase();
-                stimulus_function = drawSymbolsFrame("string", letterUpper, letterLower, loc1, loc2, "orange");
+                letterUpper = Images[i];
+                letterLower = Images[(i + 3) % Images.length]; // the + 3 must be changed if more images are added. 
+                stimulus_function = drawSymbolsFrame("image", letterUpper, letterLower, loc1, loc2, "orange");
                 stimulus_dict = {stimulus: stimulus_function, choices: ['m', 'n', ' '], correct_response: " "};
                 test_stimuli.push(stimulus_dict);
             }
@@ -736,10 +733,10 @@
         /* Matching Letters */
         function matching(loc1, loc2, arrLength) {
             for (var i = 0; i < arrLength; i++) {
-                random_letter_idx = Math.floor(Math.random() * Letters.length);
-                letterUpper = Letters[random_letter_idx];
-                letterLower = letterUpper.toLowerCase();
-                stimulus_function = drawSymbolsFrame("string", letterUpper, letterLower, loc1, loc2);
+                random_letter_idx = Math.floor(Math.random() * Images.length);
+                letterUpper = Images[random_letter_idx];
+                letterLower = Images[(random_letter_idx + 3) % Images.length]; // The + 3 must be changed if more images are added. 
+                stimulus_function = drawSymbolsFrame("image", letterUpper, letterLower, loc1, loc2);
                 stimulus_dict = {stimulus: stimulus_function, choices: ['m', 'n'], correct_response: 'm'};
                 test_stimuli.push(stimulus_dict);
             }
@@ -748,10 +745,10 @@
         /* NonMatching Letters */
         function nonMatching(loc1, loc2, arrLength) {
             for (var i = 0; i < arrLength; i++) {
-                random_letter_idx = Math.floor(Math.random() * Letters.length);
-                letterUpper = Letters[random_letter_idx];
-                letterLower = Letters[(random_letter_idx + 2) % arrLength].toLowerCase();
-                stimulus_function = drawSymbolsFrame("string", letterUpper, letterLower, loc1, loc2);
+                random_letter_idx = Math.floor(Math.random() * Images.length);
+                letterUpper = Images[random_letter_idx];
+                letterLower = Images[(random_letter_idx + 2) % Images.length]; // The + 2 must be changed if more images are added. 
+                stimulus_function = drawSymbolsFrame("image", letterUpper, letterLower, loc1, loc2);
                 stimulus_dict = {stimulus: stimulus_function, choices: ['m', 'n'], correct_response: 'n'};
                 test_stimuli.push(stimulus_dict);
             }
@@ -845,12 +842,12 @@
         /*
         TODO: 
         1. Keep fixation dot and cross in place, along with box
-        2. Fix instruction pages
+        DONE 2. Fix instruction pages
         3. Speed up inter-trial interval so that the eyes don't wander too much
         4. Make stimuli bigger/adapt stimulus to the sitting distance
         5. Redo distance orientation in between blocks - perhaps re-scale the stimulus? 
-        6. Highlight in instructions that the participant SHOULD NOT move. 
-        7. Uses images of the letters instead of the string letters. 
+        DONE 6. Highlight in instructions that the participant SHOULD NOT move. 
+        DONE 7. Uses images of the letters instead of the string letters. 
         https://www.dropbox.com/home/interhemispheric_proj -> for images
         */
     </script>
